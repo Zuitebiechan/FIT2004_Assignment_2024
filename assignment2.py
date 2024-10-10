@@ -266,10 +266,8 @@ class FlowNetwork:
         max_activity:               An integer value, represent number of activities.
         vertices_count:             An integer value, represent number of vertices needed for flow network.
                                     It is the 2 + self.max_participant + 2 * self.max_activity.
-        vertices :                  A list of Vertex object of length vertices_count.
-        
-        vertices_arr:               A list of Vertex object (data centres) of length vertices_count.
-                                    
+        vertices:                  A list of Vertex object of length vertices_count.
+                                            
                                     Index                       Item
                                     0                           source
                                     1                           sink
