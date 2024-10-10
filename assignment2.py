@@ -7,9 +7,10 @@
 from collections import deque
 
 # ======================================================== Q1 Code =================================================================
+
+# ----------------------------------------------- Class for Vertex ----------------------------------------------------
 class Vertex:
     """ 
-    ----------------------------------------------- Class for Vertex ----------------------------------------------------
     The Vertex object is used to represent the data centres. 
 
     Attributes:
@@ -63,9 +64,9 @@ class Vertex:
         """
         return str(self.id)
 
+# ----------------------------------------------- Class for FlowEdge ----------------------------------------------------
 class FlowEdge:
     """ 
-    ----------------------------------------------- Class for FlowEdge ----------------------------------------------------
     The Edge object is used to represent the outgoing edges with maximum amount of flow and current flow 
     in the flow network.
 
@@ -129,9 +130,9 @@ class FlowEdge:
         """
         return f"{self.u.id} -> {self.v.id} (capacity: {self.capacity}, flow: {self.flow})"
 
+# ----------------------------------------------- Class for ResidualEdge ----------------------------------------------------
 class ResidualEdge:
     """ 
-    ----------------------------------------------- Class for ResidualEdge ----------------------------------------------------
     The Edge object is used to represent the forward and backward edges in the residual network linking to the flow edges 
     in the flow network.
 
@@ -215,10 +216,10 @@ class ResidualEdge:
             return f"{self.u.id} -> {self.v.id} (balance: {self.w})"
         else:
             return f"{self.u.id} -> {self.v.id} (undo: {self.w})"
-    
+        
+# ----------------------------------------------- Class for Flow Network ------------------------------------------------------------
 class FlowNetwork:
     """ 
-    ----------------------------------------------- Class for Flow Network ------------------------------------------------------------
     The FlowNetwork object represent relationships between participants and activities in a flow network.
 
     Vertices represent participants and activities along with a source and sink vertex, 
@@ -349,11 +350,17 @@ class FlowNetwork:
                     edge = FlowEdge(u=participant, v=activity_interested, capacity=1) # participant -> activity_interested
                     participant.add_edge(edge)
                 elif preferences[i][j] == 2:
-                    # if participant is experienced in the activity, add edge to leader_activity
+                    # Participant is experienced in the activity
+                    # Add edge to leader_activity
                     activity_leader = self.vertices[j + self.index_to_first_leader_node]
-                    edge = FlowEdge(u=participant, v=activity_leader, capacity=1) # participant -> activity_experienced
-                    participant.add_edge(edge)
-        
+                    edge_leader = FlowEdge(u=participant, v=activity_leader, capacity=1)
+                    participant.add_edge(edge_leader)
+    
+                    # Also add edge to interested_activity to allow assignment as regular participant
+                    activity_interested = self.vertices[j + self.index_to_first_interested_node]
+                    edge_interested = FlowEdge(u=participant, v=activity_interested, capacity=1)
+                    participant.add_edge(edge_interested)
+                        
         # Add edges from leader_activity[i] node and interested_activity[i] to sink node 
         for i in range(self.max_activity): # O(M)
             activity_leader = self.vertices[i + self.index_to_first_leader_node]
@@ -407,10 +414,10 @@ class FlowNetwork:
                         assignments[activity_index].append(participant_id) # O(1)
 
         return assignments
-
+    
+# ----------------------------------------------- Class for Residual Network ------------------------------------------------------------
 class ResidualNetwork:
     """ 
-    ----------------------------------------------- Class for Residual Network ------------------------------------------------------------
     The ResidualNetwork object represent the residual network of the flow network.
 
     Attributes:
@@ -693,3 +700,64 @@ def assign(preferences: list[list], places: list[list]) -> list[list]:
     return solution
 
 # ======================================================== Q2 Code =================================================================
+
+class Node:
+    """ 
+    ----------------------------------------------- Class for Node ----------------------------------------------------
+    The Node object for Trie class.
+
+    Attributes:
+        link:               A list which stores the connected child Nodes. 
+                            The index of the link list represents the next alphabet of a sentence.
+                                index + 97 - 1 = Ascii of character 
+        frequency:          An integer value which represents the frequency of most frequent completed sentence,  
+                            this sentence has prefix up until current node. (this sentence begins with string value up until current node)
+        next_index:         Node                next_index
+                            Terminal node       None (no connected child node, sentence is complexted)
+                            Other ndoe          An integer value which represents the index of the next node in the current link list that 
+                                                leads to the completed sentence with the highest frequency.
+                                                (it also represents the next alphabet of this sentence)
+        data:               Node                data
+                            Terminal node       A string value, represents the completed sentence in the terminal node. 
+                            other node          None
+    
+    """
+    def __init__(self, size=63, data=None) -> None:
+        """
+        Description: 
+            Constructor for Node object.
+        Input:
+            size:   int value for the size of link list, it is the number of unique possible char in sentence.
+                    default value is 27 for [a...z] and $ (terminal)
+        Time complexity: 
+            Best and Worst: O(1)
+        Aux space complexity: 
+            in-place, O(1)
+        """
+        self.link = [None] * size    # $ (terminal) is at index 0, [a...z] are at index 1...26, [A...Z] are at index 27...52, [0...9] are at index 53...62
+        # data payload
+        self.frequency = data[0]
+        self.next_index = data[1]
+        self.data = data[2]
+
+class SpellChecker:
+    """
+    ----------------------------------------------- Class for SpellChecker ----------------------------------------------------
+    The SpellChecker object for Trie class.
+    """
+    def __init__(self, txt_file: str) -> None:
+        """
+        Description: 
+            Constructor for Trie object.
+        Time complexity: 
+            Best and Worst: O(1)
+        Aux space complexity: 
+            in-place, O(1)
+        """
+        self.root = Node()
+        current = self.root
+
+        myfile = open(txt_file, "r")
+        for line in myfile:
+            print(line.strip())
+        myfile.close()
