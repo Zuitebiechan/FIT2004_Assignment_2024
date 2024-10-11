@@ -1,4 +1,4 @@
-from assignment2 import SpellChecker
+from q2_answer import SpellChecker
 import unittest
 
 class TestSpellChecker(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
 import os
-from assignment2 import SpellChecker
+from q2_answer import SpellChecker
 
 # change working directory just in case
 current_dir = os.path.dirname(os.path.abspath(__file__))
