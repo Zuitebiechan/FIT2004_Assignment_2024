@@ -350,10 +350,7 @@ class Trie:
                 if word_data not in solution:
                     solution.append(word_data)
 
-    def print_trie(self):
-        self._print_trie_recursive(self.root, level=0)
-
-    def _print_trie_recursive(self, node, level):
+    def _print_trie_recursive(self, node, level=0):
         indent = '    ' * level
         if level == 0:
             print(f"{indent}Root (frequency: {node.frequency}, data: {node.data})")
@@ -441,15 +438,16 @@ class SpellChecker:
         return self.trie.check(input_word) # O(M + U)
     
     def print_trie(self):
-        self.trie.print_trie()
+        self.trie._print_trie_recursive(self.trie.root)
 
-# # # 使用示例
+# # # Example usage
 # myChecker = SpellChecker("Messages.txt")
-# # # 测试输入单词
-# print(myChecker.check("IDK"))   # 输出：[]
-# print(myChecker.check("zoo"))   # 输出：[]
-# print(myChecker.check("LOK"))   # 输出：["LOL", "LMK"]
-# print(myChecker.check("IDP"))   # 输出：["IDK", "IDC", "I"]
-# print(myChecker.check("Ifc"))   # 输出：["If", "I", "IDK"]
 
+# print(myChecker.check("IDK"))   # Expected Output：[]
+# print(myChecker.check("zoo"))   # Expected Output：[]
+# print(myChecker.check("LOK"))   # Expected Output：["LOL", "LMK"]
+# print(myChecker.check("IDP"))   # Expected Output：["IDK", "IDC", "I"]
+# print(myChecker.check("Ifc"))   # Expected Output：["If", "I", "IDK"]
+
+# Print the Trie structure
 # myChecker.print_trie()
