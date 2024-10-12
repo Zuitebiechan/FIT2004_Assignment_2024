@@ -1,3 +1,5 @@
+import re
+
 # ======================================================== Q2 Code =================================================================
 
 # ----------------------------------------------- Class for TrieNode ----------------------------------------------------
@@ -143,12 +145,12 @@ class Trie:
             self.insert_recursion(current, word, i + 1)
             
             # Update the intermediate node's words_list with terminal and child words
-            self._update_words_list(current, word) # O(1)
+            self.update_words_list(current, word) # O(1)
             
             # Return the index of the character, its frequency, and the word itself
             return index, current.frequency, current.data
         
-    def _update_words_list(self, curr_node: TrieNode, word: str) -> None:
+    def update_words_list(self, curr_node: TrieNode, word: str) -> None:
         """    
         Description:
             Update the words_list of the node to include the given word in the correct position,
@@ -212,7 +214,7 @@ class Trie:
                     curr_node.words_list[i], curr_node.words_list[i - 1] = curr_node.words_list[i - 1], curr_node.words_list[i]
                     i -= 1
 
-    def check(self, input_word: str, num_suggestions=3) -> list:
+    def _check(self, input_word: str, num_suggestions=3) -> list:
         """
         Description:
             Check the Trie for the input word and return a list of suggestions.
@@ -245,7 +247,7 @@ class Trie:
 
         solution = []  # List to store collected words and their frequencies
         # Recursively collect suggestions based on the longest matching prefix
-        self._collect_suggestions_recursive(self.root, input_word, 0, solution) # O(L + U)
+        self.collect_suggestions_recursive(self.root, input_word, 0, solution) # O(L + U)
 
         # Return at most num_suggestions words from the solution, based on the provided limit
         # Create the result list iteratively without using slices
@@ -285,7 +287,7 @@ class Trie:
         # Check if we have reached the terminal node for this word
         return current.link[0] is not None and current.link[0].data == word
 
-    def _collect_suggestions_recursive(self, current: TrieNode, word: str, index: int, solution: list) -> None:
+    def collect_suggestions_recursive(self, current: TrieNode, word: str, index: int, solution: list) -> None:
         """
         Description:
             Recursively collect suggestions from the Trie based on the longest matching prefix.
@@ -311,7 +313,7 @@ class Trie:
         if index == len(word) or current is None:
             # Collect words from the longest matching node's words_list
             if current:
-                self._collect_suggestions(current, solution) # O(U)
+                self.add_word(current, solution) # O(U)
             return
 
         char = word[index]  # Get the character at the current index
@@ -320,13 +322,13 @@ class Trie:
         # If the character exists, continue recursively to the next node
         if current.link[char_index] is not None:
             next_node = current.link[char_index]
-            self._collect_suggestions_recursive(next_node, word, index + 1, solution) 
+            self.collect_suggestions_recursive(next_node, word, index + 1, solution) 
 
         # Collect suggestions from the current node's words_list, including intermediate nodes
         if current and current.words_list:
-            self._collect_suggestions(current, solution)
+            self.add_word(current, solution)
 
-    def _collect_suggestions(self, node: TrieNode, solution: list) -> None:
+    def add_word(self, node: TrieNode, solution: list) -> None:
         """
         Description:
             Collect data from the node's words_list and add them to the solution list.
@@ -435,7 +437,7 @@ class SpellChecker:
         Analysis:
             The method calls the Trie's check method to get the suggestions.
         """
-        return self.trie.check(input_word) # O(M + U)
+        return self.trie._check(input_word) # O(M + U)
     
     def print_trie(self):
         self.trie._print_trie_recursive(self.trie.root)
