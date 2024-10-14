@@ -443,13 +443,13 @@ class SpellChecker:
         self.trie._print_trie_recursive(self.trie.root)
 
 # # # Example usage
-# myChecker = SpellChecker("Messages.txt")
+myChecker = SpellChecker("Messages.txt")
 
-# print(myChecker.check("IDK"))   # Expected Output：[]
-# print(myChecker.check("zoo"))   # Expected Output：[]
-# print(myChecker.check("LOK"))   # Expected Output：["LOL", "LMK"]
-# print(myChecker.check("IDP"))   # Expected Output：["IDK", "IDC", "I"]
-# print(myChecker.check("Ifc"))   # Expected Output：["If", "I", "IDK"]
+print(myChecker.check("IDK"))   # Expected Output：[]
+print(myChecker.check("zoo"))   # Expected Output：[]
+print(myChecker.check("LOK"))   # Expected Output：["LOL", "LMK"]
+print(myChecker.check("IDP"))   # Expected Output：["IDK", "IDC", "I"]
+print(myChecker.check("Ifc"))   # Expected Output：["If", "I", "IDK"]
 
 # Print the Trie structure
-# myChecker.print_trie()
+myChecker.print_trie()
