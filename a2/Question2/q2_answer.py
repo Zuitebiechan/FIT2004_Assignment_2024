@@ -164,10 +164,18 @@ class Trie:
             word:               A string represents the word to be added or updated in the node's words_list.
 
         Time Complexity:
-            Best & Worst: O(1) in practice due to the fixed maximum list size, with each operation involving a limited number of comparisons.
+            Best & Worst: O(1) 
+        Analysis:
+            Best:   In the best case, the word is already present at the correct position in the words_list. It means the word exists in the list, 
+                    and after updating its frequency, it doesn't need to be repositioned. Since the list size is capped at 10, checking and updating will take constant time, i.e., O(1) .
+            Worst:  Even in the worst case, the method operates on a fixed-sized list (with a maximum of 10 entries). This means that, although insertion 
+                    or adjustment might require traversing the list and performing comparisons, the number of these operations is bounded by 10. Thus, in practice, it still behaves like a constant time operation  O(1) .
 
         Auxiliary Space Complexity:
             O(1) since the words_list size is capped at a fixed maximum of 10 entries.
+        Analysis:
+            The auxiliary space usage is constant because the method does not create any structures that grow with the input size. 
+            The list has a fixed maximum size of 10, and the temporary variables (like i, new_entry, and comparisons) do not require space that scales with the input. 
         """
         max_list_size = 10  # Limit the size of the list to the top 10 most frequent words
 
